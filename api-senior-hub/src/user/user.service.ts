@@ -21,29 +21,22 @@ export class UserService {
     user.gender = createUserDto.gender;
     
     const salt = await bcrypt.genSalt();
-    user.password = await bcrypt.hash(user.password, salt);
+    user.password = await bcrypt.hash(createUserDto.password, salt);
     return this.userRepository.save(user);
-  }
-
-  findAllUser(): Promise<User[]> {
-    return this.userRepository.find();
-  }
-
-  viewUser(id: string): Promise<User | null> {
-    return this.userRepository.findOneBy({ id });
   }
 
   findByEmail(email: string): Promise<User | null> {
     return this.userRepository.findOneBy({ email });
   }
 
-  updateUser(id: string, updateUserDto: UpdateUserDto): Promise<User> {
+  async updateUser(id: string, updateUserDto: UpdateUserDto): Promise<User> {
     const user: User = new User();
     user.name = updateUserDto.name!;
     user.age = updateUserDto.age!;
     user.email = updateUserDto.email!;
     user.username = updateUserDto.username!;
-    user.password = updateUserDto.password!;
+    const salt = await bcrypt.genSalt();
+    user.password = await bcrypt.hash(updateUserDto.password, salt);
     user.id = id;
     return this.userRepository.save(user);
   }

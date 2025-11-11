@@ -6,10 +6,12 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 
 /**
  * whatever the string pass in controller decorator it will be appended to
@@ -33,30 +35,11 @@ export class UserController {
   }
 
   /**
-   * we have used get decorator to get all the user's list
-   * so the API URL will be
-   * GET http://localhost:3000/user
-   */
-  @Get()
-  findAll() {
-    return this.userService.findAllUser();
-  }
-
-  /**
-   * we have used get decorator with id param to get id from request
-   * so the API URL will be
-   * GET http://localhost:3000/user/:id
-   */
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.viewUser(id);
-  }
-
-  /**
    * we have used patch decorator with id param to get id from request
    * so the API URL will be
    * PATCH http://localhost:3000/user/:id
    */
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.updateUser(id, updateUserDto);
@@ -67,6 +50,7 @@ export class UserController {
    * so the API URL will be
    * DELETE http://localhost:3000/user/:id
    */
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.userService.removeUser(id);
