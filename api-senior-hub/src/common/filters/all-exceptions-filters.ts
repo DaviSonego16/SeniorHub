@@ -51,8 +51,9 @@ import {
   
       // 🔹 Retorno padronizado
       response.status(status).json({
+        sucess: false,
         statusCode: status,
-        message,
+        data: {message},
         timestamp: new Date().toISOString(),
       });
     }
