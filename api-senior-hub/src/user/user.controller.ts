@@ -42,8 +42,8 @@ export class UserController {
    */
   @UseGuards(JwtAuthGuard)
   @Patch('')
-  update(@Request() req, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.updateUser(req.user, updateUserDto);
+  async update(@Request() req, @Body() updateUserDto: UpdateUserDto) {
+    return await this.userService.updateUser(req.user, updateUserDto);
   }
 
   /**
@@ -53,7 +53,7 @@ export class UserController {
    */
   @UseGuards(JwtAuthGuard)
   @Delete()
-  remove(@Request() req) {
-    return this.userService.removeUser(req.user);
+  async remove(@Request() req) {
+    return await this.userService.removeUser(req.user);
   }
 }

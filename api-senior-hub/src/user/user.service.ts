@@ -55,7 +55,16 @@ export class UserService {
   }
   
 
-  removeUser(user: User): Promise<DeleteResult> {
-    return this.userRepository.delete(user.id);
+  async removeUser(user: User): Promise<{ message: string }> {
+    const result = await this.userRepository.delete(user.id);
+  
+    if (result.affected === 0) {
+      throw new Error('Usuário não encontrado.');
+    }
+  
+    return {
+      message: 'Usuário excluído com sucesso.',
+    };
   }
+  
 }
