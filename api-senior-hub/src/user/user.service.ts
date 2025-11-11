@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -33,19 +33,29 @@ export class UserService {
     return this.userRepository.findOneBy({ id });
   }
 
-  async updateUser(id: string, updateUserDto: UpdateUserDto): Promise<User> {
-    const user: User = new User();
-    user.name = updateUserDto.name!;
-    user.age = updateUserDto.age!;
-    user.email = updateUserDto.email!;
-    user.username = updateUserDto.username!;
-    const salt = await bcrypt.genSalt();
-    user.password = await bcrypt.hash(updateUserDto.password, salt);
-    user.id = id;
+  async updateUser(cUser: User, updateUserDto: UpdateUserDto): Promise<User> {
+    const user = await this.userRepository.findOneBy({ id: cUser.id });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+  
+    // Atualiza apenas os campos enviados
+    if (updateUserDto.name) user.name = updateUserDto.name;
+    if (updateUserDto.age) user.age = updateUserDto.age;
+    if (updateUserDto.email) user.email = updateUserDto.email;
+    if (updateUserDto.username) user.username = updateUserDto.username;
+  
+    // Se mandarem o password, faz o hash
+    if (updateUserDto.password) {
+      const salt = await bcrypt.genSalt();
+      user.password = await bcrypt.hash(updateUserDto.password, salt);
+    }
+  
     return this.userRepository.save(user);
   }
+  
 
-  removeUser(id: string): Promise<DeleteResult> {
-    return this.userRepository.delete(id);
+  removeUser(user: User): Promise<DeleteResult> {
+    return this.userRepository.delete(user.id);
   }
 }

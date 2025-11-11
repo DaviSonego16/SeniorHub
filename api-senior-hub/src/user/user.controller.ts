@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Request
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -40,9 +41,9 @@ export class UserController {
    * PATCH http://localhost:3000/user/:id
    */
   @UseGuards(JwtAuthGuard)
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.updateUser(id, updateUserDto);
+  @Patch('')
+  update(@Request() req, @Body() updateUserDto: UpdateUserDto) {
+    return this.userService.updateUser(req.user, updateUserDto);
   }
 
   /**
@@ -51,8 +52,8 @@ export class UserController {
    * DELETE http://localhost:3000/user/:id
    */
   @UseGuards(JwtAuthGuard)
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.removeUser(id);
+  @Delete()
+  remove(@Request() req) {
+    return this.userService.removeUser(req.user);
   }
 }
