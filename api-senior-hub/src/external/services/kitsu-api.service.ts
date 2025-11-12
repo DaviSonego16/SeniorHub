@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
+import { KitsuAnimeResponse } from '../interfaces/kitsu-anime-response.interface';
 
 @Injectable()
 export class KitsuApiService {
@@ -14,9 +15,11 @@ export class KitsuApiService {
     this.baseUrl = this.configService.get<string>('KITSU_URL') ?? '';
   }
 
-  async getAnimes(query: string): Promise<any> {
+  async getAnimes(limit: number, offset: number): Promise<any> {
     const { data } = await firstValueFrom(
-      this.http.get(`${this.baseUrl}/anime`, { params: { q: query } }),
+      this.http.get<KitsuAnimeResponse>(`${this.baseUrl}/anime`, {
+        params: { 'page[limit]': limit, 'page[offset]': offset },
+      }),
     );
     return data;
   }
