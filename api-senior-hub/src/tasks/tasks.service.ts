@@ -9,7 +9,7 @@ export class TasksService {
   constructor(private readonly kitsuApiService: KitsuApiService) {}
 
   // Executa todos os dias à meia-noite
-  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
+  @Cron(CronExpression.EVERY_WEEK)
   async handleDailyAnimeUpdate(): Promise<void> {
     this.logger.log('Iniciando atualização diária de animes...');
     try {
