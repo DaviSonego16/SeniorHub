@@ -8,13 +8,12 @@ export class TasksService {
 
   constructor(private readonly kitsuApiService: KitsuApiService) {}
 
-  // Executa todos os dias à meia-noite
   @Cron(CronExpression.EVERY_WEEK)
   async handleDailyAnimeUpdate(): Promise<void> {
-    this.logger.log('Iniciando atualização diária de animes...');
+    this.logger.log('Iniciando atualização semanal de animes...');
     try {
       await this.kitsuApiService.getAnimes(10, 0);
-      this.logger.log('Atualização diária concluída com sucesso.');
+      this.logger.log('Atualização semanal concluída com sucesso.');
     } catch (error) {
       this.logger.error('Erro ao atualizar animes:', error);
     }
