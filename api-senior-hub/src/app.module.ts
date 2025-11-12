@@ -7,6 +7,7 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ExternalModule } from './external/external.module';
+import { TasksModule } from './tasks/tasks.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { ExternalModule } from './external/external.module';
     UserModule,
     AuthModule,
     ExternalModule,
+    TasksModule,
   ],
   controllers: [AppController],
   providers: [AppService],
