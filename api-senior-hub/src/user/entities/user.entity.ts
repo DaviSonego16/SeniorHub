@@ -22,10 +22,15 @@ export class User {
 
   @Column({ type: 'enum', enum: ['m', 'f'] })
   gender: string;
-  
 
   @Column({ type: 'varchar' })
   password: string;
 
   confirmPassword: string;
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  updatedAt: Date;
 }

@@ -8,6 +8,8 @@ import { AuthModule } from './auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ExternalModule } from './external/external.module';
 import { TasksModule } from './tasks/tasks.module';
+import { AnimeModule } from './anime/anime.module';
+import { UserAnimeModule } from './user-anime/user-anime.module';
 
 @Module({
   imports: [
@@ -47,6 +49,8 @@ import { TasksModule } from './tasks/tasks.module';
     AuthModule,
     ExternalModule,
     TasksModule,
+    AnimeModule,
+    UserAnimeModule,
   ],
   controllers: [AppController],
   providers: [AppService],

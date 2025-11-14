@@ -15,7 +15,7 @@ export class KitsuApiService {
     this.baseUrl = this.configService.get<string>('KITSU_URL') ?? '';
   }
 
-  async getAnimes(limit: number, offset: number): Promise<any> {
+  async getAnimes(limit: number, offset: number): Promise<KitsuAnimeResponse> {
     const { data } = await firstValueFrom(
       this.http.get<KitsuAnimeResponse>(`${this.baseUrl}/anime`, {
         params: { 'page[limit]': limit, 'page[offset]': offset },
