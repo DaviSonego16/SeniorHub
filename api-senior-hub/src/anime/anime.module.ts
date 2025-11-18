@@ -10,6 +10,6 @@ import { AnimeController } from './anime.controller';
   ],
   providers: [AnimeService],
   controllers: [AnimeController],
-  exports: [AnimeService],
+  exports: [AnimeService, MongooseModule],
 })
 export class AnimeModule {}

@@ -1,25 +1,13 @@
-import { IsInt, IsBoolean, IsOptional } from 'class-validator';
+import { IsString, IsNotEmpty, IsUUID } from 'class-validator';
 
 export class CreateUserAnimeDto {
-  @IsInt()
-  userId: number;
+  @IsString()
+  @IsNotEmpty()
+  @IsUUID('4')
+  userId: string;
 
-  @IsInt()
+  @IsString()
+  @IsNotEmpty()
+  @IsUUID('4')
   animeId: string;
-
-  @IsOptional()
-  @IsInt()
-  rating?: number;
-
-  @IsOptional()
-  @IsBoolean()
-  isCompleted?: boolean;
-
-  @IsOptional()
-  @IsInt()
-  currentEpisode?: number;
-
-  @IsOptional()
-  @IsBoolean()
-  watchLater?: boolean;
 }

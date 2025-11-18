@@ -24,11 +24,7 @@ import { UserAnimeModule } from './user-anime/user-anime.module';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
-        host: configService.get<string>('PG_HOST'),
-        port: configService.get<number>('PG_PORT'),
-        username: configService.get<string>('PG_USER'),
-        password: configService.get<string>('PG_PASSWORD'),
-        database: configService.get<string>('PG_DATABASE'),
+        url: configService.get<string>('PG_URL'),
         autoLoadEntities: true,
         synchronize: true,
         logging: true,

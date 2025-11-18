@@ -10,6 +10,8 @@ import { Model } from 'mongoose';
 
 import { UserAnime } from './entities/user-anime.entity';
 import { Anime } from './../anime/entities/anime.schema';
+import { CreateUserAnimeDto } from './dto/create-user-anime.dto';
+import { UpdateUserAnimeDto } from './dto/update-user-anime.dto';
 
 @Injectable()
 export class UserAnimeService {
@@ -24,11 +26,11 @@ export class UserAnimeService {
   // -------------------------------------------------------------
 
   /** Verifica duplicidade para evitar adicionar 2x o mesmo anime */
-  private async ensureNotExists(userId: string, animeId: string) {
+  private async ensureNotExists(model: CreateUserAnimeDto) {
     const exists = await this.userAnimeRepo.findOne({
       where: {
-        user: { id: userId },
-        anime: animeId,
+        user: { id: model.userId },
+        anime: model.animeId,
       },
     });
 
@@ -40,17 +42,17 @@ export class UserAnimeService {
   // -------------------------------------------------------------
 
   /** Adiciona um anime à lista */
-  async addAnimeToUser(userId: string, animeId: string) {
-    const animeExists = await this.animeModel.findById(animeId);
+  async addAnimeToUser(model: CreateUserAnimeDto) {
+    const animeExists = await this.animeModel.findById(model.animeId);
     if (!animeExists) {
       throw new NotFoundException('Anime não encontrado no MongoDB.');
     }
 
-    await this.ensureNotExists(userId, animeId);
+    await this.ensureNotExists(model);
 
     const userAnime = this.userAnimeRepo.create({
-      user: { id: userId },
-      anime: animeId,
+      user: { id: model.userId },
+      anime: model.animeId,
       currentEpisode: 0,
       isCompleted: false,
       watchLater: false,
@@ -59,10 +61,20 @@ export class UserAnimeService {
     return await this.userAnimeRepo.save(userAnime);
   }
 
+  //TODO
+  async asyncUpdateAnimeUser(id: string, model: UpdateUserAnimeDto) {
+    const userAnime = await this.userAnimeRepo.findOne({ where: { id } });
+    if (model.isCompleted) {
+      return;
+    }
+
+    return userAnime;
+  }
+
   // -------------------------------------------------------------
 
   /** Lista todos os animes do usuário com detalhes do MongoDB */
-  async listUserAnimes(userId: string) {
+  private async listUserAnimes(userId: string) {
     const list = await this.userAnimeRepo.find({
       where: { user: { id: userId } },
       order: { updatedAt: 'DESC' },
@@ -81,7 +93,7 @@ export class UserAnimeService {
   // -------------------------------------------------------------
 
   /** Retorna um item específico da lista */
-  async getUserAnimeById(id: string) {
+  private async getUserAnimeById(id: string) {
     const userAnime = await this.userAnimeRepo.findOne({ where: { id } });
 
     if (!userAnime) throw new NotFoundException('Registro não encontrado.');
@@ -94,7 +106,7 @@ export class UserAnimeService {
   // -------------------------------------------------------------
 
   /** Atualizar episódio atual */
-  async updateEpisode(id: string, episode: number) {
+  private async updateEpisode(id: string, episode: number) {
     const userAnime = await this.userAnimeRepo.findOne({ where: { id } });
 
     if (!userAnime) throw new NotFoundException('Registro não encontrado.');
@@ -110,7 +122,7 @@ export class UserAnimeService {
   // -------------------------------------------------------------
 
   /** Marcar como concluído */
-  async markAsCompleted(id: string) {
+  private async markAsCompleted(id: string) {
     const userAnime = await this.userAnimeRepo.findOne({ where: { id } });
 
     if (!userAnime) throw new NotFoundException('Registro não encontrado.');
@@ -124,7 +136,7 @@ export class UserAnimeService {
   // -------------------------------------------------------------
 
   /** Marcar para assistir mais tarde */
-  async toggleWatchLater(id: string) {
+  private async toggleWatchLater(id: string) {
     const userAnime = await this.userAnimeRepo.findOne({ where: { id } });
 
     if (!userAnime) throw new NotFoundException('Registro não encontrado.');

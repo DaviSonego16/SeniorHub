@@ -9,16 +9,16 @@ export class UserAnimeController {
 
   @Post()
   create(@Body() dto: CreateUserAnimeDto) {
-    return this.userAnimeService.create(dto);
+    return this.userAnimeService.addAnimeToUser(dto);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() dto: UpdateUserAnimeDto) {
-    return this.userAnimeService.update(Number(id), dto);
+    return this.userAnimeService.asyncUpdateAnimeUser(id, dto);
   }
 
   @Delete(':id')
   delete(@Param('id') id: string) {
-    return this.userAnimeService.delete(Number(id));
+    return this.userAnimeService.remove(id);
   }
 }
