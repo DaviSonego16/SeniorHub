@@ -18,7 +18,9 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   password?: string;
 
   @ValidateIf((o) => o.password !== undefined)
-  @IsNotEmpty({ message: 'Confirm password is required when updating password.' })
+  @IsNotEmpty({
+    message: 'Confirm password is required when updating password.',
+  })
   @Match('password', { message: 'Confirm password must match password.' })
   confirmPassword?: string;
 }

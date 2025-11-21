@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  NotFoundException,
-  ConflictException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { InjectModel } from '@nestjs/mongoose';
@@ -10,7 +6,6 @@ import { Model } from 'mongoose';
 
 import { UserAnime } from './entities/user-anime.entity';
 import { Anime } from './../anime/entities/anime.schema';
-import { CreateUserAnimeDto } from './dto/create-user-anime.dto';
 import { UpdateUserAnimeDto } from './dto/update-user-anime.dto';
 
 @Injectable()
@@ -26,7 +21,7 @@ export class UserAnimeService {
   // -------------------------------------------------------------
 
   /** Verifica duplicidade para evitar adicionar 2x o mesmo anime */
-  private async ensureNotExists(model: CreateUserAnimeDto) {
+  private async seeIfExists(model: { animeId: string; userId: string }) {
     const exists = await this.userAnimeRepo.findOne({
       where: {
         user: { id: model.userId },
@@ -35,20 +30,20 @@ export class UserAnimeService {
     });
 
     if (exists) {
-      throw new ConflictException('Anime já está na lista do usuário.');
+      return exists;
     }
   }
 
   // -------------------------------------------------------------
 
   /** Adiciona um anime à lista */
-  async addAnimeToUser(model: CreateUserAnimeDto) {
+  async addAnimeToUser(model: { animeId: string; userId: string }) {
     const animeExists = await this.animeModel.findById(model.animeId);
     if (!animeExists) {
       throw new NotFoundException('Anime não encontrado no MongoDB.');
     }
 
-    await this.ensureNotExists(model);
+    await this.seeIfExists(model);
 
     const userAnime = this.userAnimeRepo.create({
       user: { id: model.userId },
@@ -62,10 +57,22 @@ export class UserAnimeService {
   }
 
   //TODO
-  async asyncUpdateAnimeUser(id: string, model: UpdateUserAnimeDto) {
-    const userAnime = await this.userAnimeRepo.findOne({ where: { id } });
+  async asyncUpdateAnimeUser(userId: string, model: UpdateUserAnimeDto) {
+    let userAnime: UserAnime | undefined = await this.seeIfExists({
+      userId,
+      animeId: model.animeId,
+    });
+    if (!userAnime) {
+      userAnime = await this.addAnimeToUser({ userId, animeId: model.animeId });
+    }
     if (model.isCompleted) {
-      return;
+      await this.markAsCompleted(userAnime.id);
+    } else if (model.currentEpisode) {
+      await this.updateEpisode(userAnime.id, model.currentEpisode);
+    } else if (model.rating) {
+      await this.rateAnime(userAnime.id, model.rating);
+    } else if (model.watchLater) {
+      await this.toggleWatchLater(userAnime.id);
     }
 
     return userAnime;
@@ -74,7 +81,7 @@ export class UserAnimeService {
   // -------------------------------------------------------------
 
   /** Lista todos os animes do usuário com detalhes do MongoDB */
-  private async listUserAnimes(userId: string) {
+  async listUserAnimes(userId: string) {
     const list = await this.userAnimeRepo.find({
       where: { user: { id: userId } },
       order: { updatedAt: 'DESC' },
@@ -93,7 +100,7 @@ export class UserAnimeService {
   // -------------------------------------------------------------
 
   /** Retorna um item específico da lista */
-  private async getUserAnimeById(id: string) {
+  async getUserAnimeById(id: string) {
     const userAnime = await this.userAnimeRepo.findOne({ where: { id } });
 
     if (!userAnime) throw new NotFoundException('Registro não encontrado.');
@@ -101,6 +108,22 @@ export class UserAnimeService {
     const animeDetails = await this.animeModel.findById(userAnime.anime);
 
     return { ...userAnime, anime: animeDetails };
+  }
+
+  // -------------------------------------------------------------
+
+  /** Atualizar episódio atual */
+  private async rateAnime(id: string, rating: number) {
+    const userAnime = await this.userAnimeRepo.findOne({ where: { id } });
+
+    if (!userAnime) throw new NotFoundException('Registro não encontrado.');
+
+    userAnime.rating = rating;
+    userAnime.updatedAt = new Date();
+
+    await this.userAnimeRepo.save(userAnime);
+
+    return userAnime;
   }
 
   // -------------------------------------------------------------

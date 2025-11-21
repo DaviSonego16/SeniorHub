@@ -1,6 +1,18 @@
-import { IsInt, IsBoolean, IsOptional } from 'class-validator';
+import {
+  IsInt,
+  IsBoolean,
+  IsOptional,
+  IsNotEmpty,
+  IsString,
+  IsUUID,
+} from 'class-validator';
 
 export class UpdateUserAnimeDto {
+  @IsString()
+  @IsNotEmpty()
+  @IsUUID('4')
+  animeId: string;
+
   @IsOptional()
   @IsInt()
   rating?: number;

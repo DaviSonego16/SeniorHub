@@ -1,10 +1,12 @@
-import { Controller, Get, Query, Param } from '@nestjs/common';
+import { Controller, Get, Query, Param, UseGuards } from '@nestjs/common';
 import { AnimeService } from './anime.service';
+import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 
 @Controller('anime')
 export class AnimeController {
   constructor(private readonly animeService: AnimeService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   async findWithFilter(
     @Query('title') title?: string,

@@ -1,22 +1,40 @@
-import { Controller, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Body,
+  Param,
+  Delete,
+  UseGuards,
+  Get,
+  Post,
+  Request,
+} from '@nestjs/common';
 import { UserAnimeService } from './user-anime.service';
-import { CreateUserAnimeDto } from './dto/create-user-anime.dto';
 import { UpdateUserAnimeDto } from './dto/update-user-anime.dto';
+import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 
 @Controller('user-anime')
 export class UserAnimeController {
   constructor(private readonly userAnimeService: UserAnimeService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Body() dto: CreateUserAnimeDto) {
-    return this.userAnimeService.addAnimeToUser(dto);
+  actOnUserAnime(@Request() req, @Body() dto: UpdateUserAnimeDto) {
+    return this.userAnimeService.asyncUpdateAnimeUser(req.user.id, dto);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() dto: UpdateUserAnimeDto) {
-    return this.userAnimeService.asyncUpdateAnimeUser(id, dto);
+  @UseGuards(JwtAuthGuard)
+  @Get()
+  get(@Request() req) {
+    return this.userAnimeService.listUserAnimes(req.user.id);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Get('id')
+  getOne(@Param('id') id: string) {
+    return this.userAnimeService.getUserAnimeById(id);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   delete(@Param('id') id: string) {
     return this.userAnimeService.remove(id);
