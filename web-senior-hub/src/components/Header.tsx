@@ -6,16 +6,12 @@ export default function Header() {
       <div className="max-w-6xl mx-auto w-full px-4">
 
         <div className="flex-1">
-          <Link to="/" className="text-2xl font-bold text-primary">
+          <Link 
+            to="/" 
+            className="text-4xl font-extrabold text-secondary"
+          >
             Senior Hub
           </Link>
-        </div>
-
-        <div className="flex-none">
-          <ul className="menu menu-horizontal px-1 text-base">
-            <li><Link to="/login">Login</Link></li>
-            <li><Link to="/register">Cadastro</Link></li>
-          </ul>
         </div>
 
       </div>
