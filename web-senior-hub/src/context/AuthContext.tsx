@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   async function register(data: any) {
     setLoading(true)
-    await api.post('/auth/register', data)
+    await api.post('/user', data)
     setLoading(false)
   }
 
