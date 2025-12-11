@@ -1,0 +1,42 @@
+/* ================================
+   🌈 Tema Global (Anime Theme) — versão corrigida com contraste real
+   ================================ */
+:root {
+  --color-primary: #4f46e5;
+  --color-primary-dark: #4338ca;
+  --color-primary-light: #D9DAFF;
+
+  --color-bg: #0F1115;
+  --color-bg-secondary: #1A1D23;
+  --color-card: #232732; 
+
+  --color-text: #e4e4e7;
+  --color-text-secondary: #C3C3D1;
+  --color-text-muted: #8B8B99;
+
+  --color-accent-purple: #B15BFF;
+  --color-accent-pink: #FF4FB3;
+  --color-accent-cyan: #3AE7F5;
+
+  --color-success: #48E29E;
+  --color-warning: #F2C14E;
+  --color-error: #FF5C5C;
+}
+
+/* Conecta ao DaisyUI */
+[data-theme="anime"] {
+  --p: var(--color-primary);
+  --pf: var(--color-primary-dark);
+  --pc: #ffffff;
+
+  --b1: var(--color-bg);
+  --b2: var(--color-bg-secondary);
+  --b3: var(--color-card);
+
+  --bc: var(--color-text-secondary);
+
+  --in: var(--color-accent-cyan);
+  --su: var(--color-success);
+  --wa: var(--color-warning);
+  --er: var(--color-error);
+}

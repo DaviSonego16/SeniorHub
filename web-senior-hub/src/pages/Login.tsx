@@ -13,19 +13,19 @@ export function Login() {
     await login(email, password);
   }
 
-  // 🎨 Estilo único igual ao Register
+  // Input estilizado seguindo o tema global
   const inputStyle =
-    "w-full px-4 py-2 rounded-md " +
-    "bg-[#2e3b4a] " + // fundo igual
-    "shadow-[0_2px_6px_rgba(0,0,0,0.15)] " +
-    "focus:border-primary focus:shadow-[0_0_8px_rgba(0,0,0,0.25)] " +
-    "outline-none text-white placeholder:opacity-60";
+    "w-full px-4 py-2 rounded-lg " +
+    "bg-[var(--color-bg-secondary)] border border-transparent " +
+    "focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary-light)] " +
+    "text-[var(--color-text)] placeholder:text-[var(--color-text-muted)] " +
+    "transition-all duration-200 shadow-md";
 
   return (
-    <div className="card bg-base-100 shadow-lg w-full max-w-lg mx-auto p-2">
-      <form className="card-body space-y-4" onSubmit={handleSubmit}>
+    <div className="card-anime w-full max-w-lg mx-auto p-2 mt-10">
+      <form className="space-y-6 p-6" onSubmit={handleSubmit}>
 
-        <h1 className="text-3xl font-bold text-center text-primary">
+        <h1 className="text-3xl font-bold text-center text-[var(--color-primary)]">
           Login
         </h1>
 
@@ -48,18 +48,18 @@ export function Login() {
             onChange={(e) => setPassword(e.target.value)}
           />
 
-          {/* Botão mostrar/ocultar */}
+          {/* Botão mostrar/ocultar senha */}
           <button
             type="button"
-            className="absolute right-3 top-2.5 text-primary"
+            className="absolute right-3 top-3 text-[var(--color-primary)] hover:opacity-80 transition"
             onClick={() => setShowPassword((p) => !p)}
           >
             {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
           </button>
         </div>
 
-        {/* Botão */}
-        <button className="btn w-full bg-primary text-white hover:bg-primary-focus">
+        {/* Botão entrar */}
+        <button className="btn-anime w-full py-2 text-center font-semibold">
           Entrar
         </button>
 

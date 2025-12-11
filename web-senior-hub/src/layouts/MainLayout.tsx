@@ -1,14 +1,19 @@
-import Header from '../components/Header'
+import Header from "../components/Header";
 
 export default function MainLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)] flex flex-col">
+      {/* Header global */}
       <Header />
-      <main className="p-6 max-w-3xl mx-auto">{children}</main>
+
+      {/* Conteúdo */}
+      <main className="p-6 max-w-4xl mx-auto w-full bg-[var(--color-bg)]">
+        {children}
+      </main>
     </div>
-  )
+  );
 }

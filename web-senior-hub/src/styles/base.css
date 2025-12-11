@@ -1,0 +1,20 @@
+@tailwind base;
+
+html, body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: "Inter", sans-serif;
+  scroll-behavior: smooth;
+}
+
+/* Scrollbar estilizada */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg-secondary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary-dark);
+  border-radius: 4px;
+}

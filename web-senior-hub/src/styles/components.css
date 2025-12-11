@@ -1,0 +1,131 @@
+@tailwind components;
+
+/* ============================================================
+   🎴 Cards
+   ============================================================ */
+.card-anime {
+  @apply rounded-xl p-4 shadow-lg transition-all duration-200;
+  background-color: var(--color-card);
+}
+.card-anime:hover {
+  @apply scale-[1.02];
+  background-color: var(--color-bg-secondary);
+}
+
+/* ============================================================
+   🔘 Botões Gerais
+   ============================================================ */
+.btn-base {
+  @apply rounded-lg px-4 py-2 font-medium transition-all duration-200 cursor-pointer;
+}
+
+
+/* ============================================================
+   🎨 BOTÃO PRIMÁRIO
+   ============================================================ */
+.btn-anime {
+  @apply btn-base;
+  background-color: var(--color-primary);
+  color: white;
+}
+.btn-anime:hover {
+  background-color: var(--color-primary-dark);
+}
+
+
+/* ============================================================
+   🎨 BOTÃO SECUNDÁRIO (o que estava com problema)
+   ============================================================ */
+.btn-anime-secondary {
+  @apply btn-base;
+  background-color: transparent;
+  border: 2px solid var(--color-primary);
+  color: var(--color-primary);
+}
+.btn-anime-secondary:hover {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+
+/* ============================================================
+   🎨 BOTÃO GHOST
+   ============================================================ */
+.btn-anime-ghost {
+  @apply btn-base;
+  background-color: transparent;
+  color: var(--color-text-secondary);
+}
+.btn-anime-ghost:hover {
+  background-color: var(--color-bg-secondary);
+}
+
+
+/* ============================================================
+   🎨 BOTÃO OUTLINE
+   ============================================================ */
+.btn-anime-outline {
+  @apply btn-base;
+  border: 2px solid var(--color-text-muted);
+  color: var(--color-text);
+  background: transparent;
+}
+.btn-anime-outline:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+
+/* ============================================================
+   🚨 BOTÃO DANGER
+   ============================================================ */
+.btn-anime-danger {
+  @apply btn-base;
+  background-color: var(--color-error);
+  color: white;
+}
+.btn-anime-danger:hover {
+  opacity: 0.85;
+}
+
+
+/* ============================================================
+   ✅ BOTÃO SUCCESS
+   ============================================================ */
+.btn-anime-success {
+  @apply btn-base;
+  background-color: var(--color-success);
+  color: black;
+}
+.btn-anime-success:hover {
+  opacity: 0.9;
+}
+
+
+/* ============================================================
+   ⚠️ BOTÃO WARNING
+   ============================================================ */
+.btn-anime-warning {
+  @apply btn-base;
+  background-color: var(--color-warning);
+  color: black;
+}
+.btn-anime-warning:hover {
+  opacity: 0.9;
+}
+
+
+/* ============================================================
+   🏷 BADGES
+   ============================================================ */
+.badge-popular {
+  background-color: var(--color-accent-pink);
+}
+
+.badge-trending {
+  background-color: var(--color-accent-purple);
+}
+
+.badge-new {
+  background-color: var(--color-accent-cyan);
+}
