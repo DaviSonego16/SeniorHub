@@ -1,19 +1,25 @@
 import { useState } from "react";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/useAuth";
 import { Eye, EyeOff } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export function Login() {
-  const { login } = useAuth();
+  const { login, loading } = useAuth();
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    await login(email, password);
+    const ok = await login(email, password);
+
+    if (ok) {
+      navigate("/"); // redireciona após sucesso
+    }
   }
 
-  // Input estilizado seguindo o tema global
   const inputStyle =
     "w-full px-4 py-2 rounded-lg " +
     "bg-[var(--color-bg-secondary)] border border-transparent " +
@@ -24,7 +30,6 @@ export function Login() {
   return (
     <div className="card-anime w-full max-w-lg mx-auto p-2 mt-10">
       <form className="space-y-6 p-6" onSubmit={handleSubmit}>
-
         <h1 className="text-3xl font-bold text-center text-[var(--color-primary)]">
           Login
         </h1>
@@ -34,6 +39,7 @@ export function Login() {
           className={inputStyle}
           placeholder="Email"
           type="email"
+          required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
@@ -44,11 +50,11 @@ export function Login() {
             className={inputStyle}
             placeholder="Senha"
             type={showPassword ? "text" : "password"}
+            required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
 
-          {/* Botão mostrar/ocultar senha */}
           <button
             type="button"
             className="absolute right-3 top-3 text-[var(--color-primary)] hover:opacity-80 transition"
@@ -59,10 +65,12 @@ export function Login() {
         </div>
 
         {/* Botão entrar */}
-        <button className="btn-anime w-full py-2 text-center font-semibold">
-          Entrar
+        <button
+          disabled={loading}
+          className="btn-anime w-full py-2 text-center font-semibold disabled:opacity-60"
+        >
+          {loading ? "Entrando..." : "Entrar"}
         </button>
-
       </form>
     </div>
   );

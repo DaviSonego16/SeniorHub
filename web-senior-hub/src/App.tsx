@@ -1,5 +1,6 @@
-import { Outlet } from "react-router-dom";
-import Header from "./components/Header";
+import { Outlet } from 'react-router-dom'
+import { Toaster } from 'react-hot-toast'
+import Header from './components/Header'
 
 export default function App() {
   return (
@@ -19,8 +20,9 @@ export default function App() {
           bg-[var(--color-bg)]
         "
       >
+        <Toaster position="top-right" />
         <Outlet />
       </main>
     </div>
-  );
+  )
 }
